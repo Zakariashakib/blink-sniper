@@ -34,7 +34,7 @@ This is also an **accessibility-focused** project designed to make gaming possib
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/blink-sniper.git
+git clone https://github.com/Zakariashakib/blink-sniper.git
 cd blink-sniper
 ```
 
