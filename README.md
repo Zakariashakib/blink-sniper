@@ -1,164 +1,95 @@
-# 🎯 BLINK SNIPER — Eye-Tracking Sniper Action Game
+# BLINK SNIPER 🎯👁️
 
-> **"Only Your Eyes Can Save Her."**
+An accessible, hands-free tactical sniper game built with Python, Pygame, and MediaPipe. Designed specifically for players without upper-limb mobility: **aim with your gaze and head motion, close both eyes to fire.**
 
-**Blink Sniper** is a Python-based 2D sniper action game where you **aim with your head movements** and **shoot by blinking your eyes**. Built with **Pygame**, **OpenCV**, and **Google MediaPipe**, this game is completely **hands-free** — no mouse or keyboard required.
+![Blink Sniper Menu](previews/menu.png)
 
-This is also an **accessibility-focused** project designed to make gaming possible for people with physical disabilities.
+## Key Features
 
----
+- **Hands-Free Optical Gameplay:** Seamless gaze and head-pose targeting with gentle magnetic target acquisition.
+- **Dual Neural & Geometric Blink Detection:** Powered by MediaPipe Neural Blendshapes (`eyeBlinkLeft` + `eyeBlinkRight`) fused with Bilateral Eye Aspect Ratio (EAR) for rock-solid, responsive blink recognition without false winks.
+- **Zero-Dependency Procedural Audio:** Fully synthesized high-impact tactical audio in pure Python/Pygame (sniper gunshot boom, railgun charge whine, hit markers, headshot chimes, alarms, and blink confirmation tones).
+- **Premium Cyberpunk Art Direction:** Articulated cyber-warriors with dynamic walking strides, rotating holographic drone targets, active enemy sniper laser targeting beams, purple forcefield mechs, screen recoil shake, and supersonic tracer effects.
+- **Headshot & Weak Point System:** Precision aiming rewarded with critical headshot popups and double damage.
+- **Three Tactical Missions:** From holographic firing range calibration to hostile outposts and civilian hostage rescue with a battle-mech boss.
+- **Accessible Scanning Menus:** Automatic button scanning with dwell-selection and blink-activation.
 
-## 🎮 Gameplay Demo
+![Blink Sniper Gameplay](previews/playing.png)
 
-| Feature | Description |
-|---|---|
-| 🎯 **Aiming** | Move your head to control the crosshair |
-| 👁️ **Shooting** | Blink to fire — hold your blink for charged shots |
-| 🖱️ **Fallback** | Mouse + Keyboard mode available without webcam |
-| 🏆 **3 Levels** | Training → Enemy Camp → Boss Fight + Hostage Rescue |
+## Quick Start
 
----
+### 1. Requirements
 
-## 🛠️ Tech Stack
+- Python 3.10+
+- Webcam (or optional mouse/keyboard fallback)
 
-| Library | Purpose |
-|---|---|
-| `Python 3.x` | Core language |
-| `Pygame` | Game engine — rendering, audio, game loop |
-| `OpenCV (cv2)` | Webcam video capture |
-| `MediaPipe` | Google's AI face tracking (468 facial landmarks) |
+### 2. Installation
 
----
-
-## 🚀 Quick Start
-
-### 1. Clone the repository
-```bash
+```sh
+# Clone repository
 git clone https://github.com/Zakariashakib/blink-sniper.git
 cd blink-sniper
-```
 
-### 2. Install dependencies
-```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### 3. Run the game
-```bash
-# Full game (all features, all levels)
-python "BLINK SNIPER.py"
-
-# Modular version (Level 1 only)
+# Run the game
 python main.py
 ```
 
-### Hardware Requirements
-- **Python 3.x**
-- **Webcam** (720p recommended) — for eye tracking
-- Works **without a webcam** too (Mouse Mode)
+*Note: `python "BLINK SNIPER.py"` also launches the complete game.*
 
----
+### 3. Controls
 
-## 🎮 Controls
+| Action | Hands-Free (Webcam) | Keyboard / Mouse Fallback |
+|---|---|---|
+| **Aim** | Look toward target (head & eye tracking) | Move mouse |
+| **Shoot** | Close both eyes (~140 ms) | Left Click |
+| **Charged Shot** | Automatic power shot on sustained hold | Hold Space (750 ms) & release |
+| **Menu Selection** | Blink when button is highlighted | Click or Press Enter |
+| **Pause** | Gaze at PAUSE for 1.3 seconds | Press Esc |
+| **Toggle Controls** | Press `E` | Press `E` |
 
-| Control | Action |
-|---|---|
-| Head Movement (Eye Tracking) | Move crosshair |
-| Blink | Normal shot |
-| Long Blink (hold eyes closed) | Charged shot |
-| `SPACE` (Hold/Release) | Aim & shoot (Mouse Mode) |
-| `Left Click` | Quick shot (Mouse Mode) |
-| `E` | Toggle Eye Tracking / Mouse Mode |
-| `ESC` | Pause menu |
-| `UP/DOWN` | Adjust game speed |
+### 4. Command-Line Options
 
----
+```sh
+# Launch in mouse mode without accessing the camera
+python main.py --no-camera
 
-## 📖 Story
+# Use an external webcam device
+python main.py --camera 1
 
-You are a retired elite sniper. A criminal syndicate has kidnapped your girlfriend. No army, no backup — just your rifle, your focus, and your eyes.
-
-### Level 1: Training Range 🎯
-- Learn the controls in a safe environment
-- Destroy 5 targets with limited shots
-- Player is invincible
-
-### Level 2: Enemy Camp ⚔️
-- Active combat against AI enemies (Guards, Snipers, Runners)
-- Enemies shoot back and dodge your crosshair
-- Survive with 3 health points
-
-### Level 3: Rescue Mission 🏴
-- **3 Phases:** Entry Zone → Combat Hall → Boss Fight
-- Final boss has a shield (break it with charged shots!)
-- **Hostage mechanic** — don't shoot your girlfriend!
-
----
-
-## 🔬 How Eye Tracking Works
-
-```
-Webcam → OpenCV Frame Capture → MediaPipe FaceMesh
-→ 468 Landmarks Detected → Nose position moves Crosshair
-→ EAR (Eye Aspect Ratio) Calculated → Blink Detected → Shoot!
+# Render headless preview screenshots
+python main.py --preview previews
 ```
 
-**EAR Formula:**
-- EAR < 0.22 → Eyes closed (blink starts)
-- Eyes open: hold ≥ 0.75s → **Charged Shot**, hold ≥ 0.1s → **Normal Shot**
+## Running Automated Tests
 
----
+```sh
+python -m unittest discover -s tests -v
+```
 
-## 📁 Project Structure
+All 25 unit tests verify blink state machines, cold-start calibration, hysteresis rejection, lost-face handling, aspect-correct eye geometry, and full mission completion.
+
+## Architecture
 
 ```
 BLINK SNIPER/
-├── BLINK SNIPER.py          ← Main game (monolithic, all features)
-├── main.py                  ← Modular entry point
-├── scenes.py                ← Scene Manager, Menu, Level scenes
-├── settings.py              ← Global configuration
-├── ui.py                    ← Button & HUD classes
-├── requirements.txt         ← Python dependencies
-└── README.md                ← This file
+├── game.py         # Main game loop, missions, combat mechanics, HUD
+├── tracking.py     # MediaPipe FaceLandmarker, blendshape extractor, blink detector
+├── visuals.py      # Procedural cyberpunk graphics, enemy models, optic reticle
+├── audio.py        # Zero-dependency procedural sound synthesizer
+├── main.py         # Primary launcher
+├── BLINK SNIPER.py # Compatibility launcher
+├── assets/         # MediaPipe Face Landmarker model asset
+├── previews/       # Real-time rendered screenshots
+└── tests/          # Comprehensive unit test suite
 ```
 
----
+## License
 
-## ✨ Key Features
-
-- 🎮 **Fully Hands-Free Gameplay** — play without mouse or keyboard
-- 👁️ **Blink-Based Shooting** — natural eye blink as game mechanic
-- ♿ **Accessibility Focused** — designed for gamers with physical disabilities
-- 🤖 **Real-Time AI** — Google MediaPipe for zero-latency face tracking
-- 🎨 **Cinematic Visuals** — neon glow, particles, fog, fireflies, vignette
-- ⏱️ **Time Dilation** — slow-motion during charged shots in boss fight
-- 🎯 **Dynamic Difficulty** — Easy / Medium modes affect all game entities
-- 🏗️ **Dual Architecture** — Monolithic & Modular versions side by side
-
----
-
-## ⚙️ Difficulty Settings
-
-| Feature | EASY | MEDIUM |
-|---|---|---|
-| Target Size | Large (40px) | Small (28px) |
-| Enemy Speed | ×0.3 | Normal |
-| Enemy HP | 1 | 2-6 |
-| Boss HP | 5 | 20 |
-| Player Health | 10 hearts | 3 hearts |
-
----
-
-## 📜 License
-
-This project is open source. Feel free to use, modify, and share.
-
----
-
-## 👤 Author
-
-**Zakaria Shakib**
-
----
-
-*Built with ❤️ using Python, Pygame, OpenCV & MediaPipe*
+MIT License. Designed and built with love for accessible gaming.
